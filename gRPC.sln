@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gRPCServer", "gRPCServer\gR
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gRPCClient", "gRPCClient\gRPCClient.csproj", "{F1139500-422C-4B41-B86E-F12E564F8D96}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gRPCCommon", "gRPCCommon\gRPCCommon.csproj", "{64F6F15F-0B10-4921-830B-2F3269AD3995}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,14 @@ Global
 		{F1139500-422C-4B41-B86E-F12E564F8D96}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F1139500-422C-4B41-B86E-F12E564F8D96}.Release|x64.ActiveCfg = Release|Any CPU
 		{F1139500-422C-4B41-B86E-F12E564F8D96}.Release|x64.Build.0 = Release|Any CPU
+		{64F6F15F-0B10-4921-830B-2F3269AD3995}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64F6F15F-0B10-4921-830B-2F3269AD3995}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64F6F15F-0B10-4921-830B-2F3269AD3995}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{64F6F15F-0B10-4921-830B-2F3269AD3995}.Debug|x64.Build.0 = Debug|Any CPU
+		{64F6F15F-0B10-4921-830B-2F3269AD3995}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64F6F15F-0B10-4921-830B-2F3269AD3995}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64F6F15F-0B10-4921-830B-2F3269AD3995}.Release|x64.ActiveCfg = Release|Any CPU
+		{64F6F15F-0B10-4921-830B-2F3269AD3995}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

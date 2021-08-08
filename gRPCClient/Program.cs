@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using Grpc.Net.Client;
-using gRPCClient;
+using gRPCCommon;
 
 namespace GrpcGreeterClient
 {
@@ -10,6 +10,9 @@ namespace GrpcGreeterClient
     {
         static async Task Main(string[] args)
         {
+            Console.WriteLine("Press enter to start");
+            Console.ReadLine();
+
             // The port number(5001) must match the port of the gRPC server.
             using var channel = GrpcChannel.ForAddress("https://localhost:5001");
             var client = new Greeter.GreeterClient(channel);
