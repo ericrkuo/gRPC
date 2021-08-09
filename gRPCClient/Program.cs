@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Grpc.Core;
 using Grpc.Net.Client;
+using Grpc.Net.Client.Configuration;
 using gRPCCommon;
 
 namespace GrpcGreeterClient
@@ -16,8 +17,25 @@ namespace GrpcGreeterClient
             Console.Write("Select type of call: Unary[0], Server[1], Client[2], Bidirectional[3]: ");
             String option = Console.ReadLine();
 
+            var defaultMethodConfig = new MethodConfig
+            {
+                Names = { MethodName.Default },
+                RetryPolicy = new RetryPolicy
+                {
+                    MaxAttempts = 5,
+                    InitialBackoff = TimeSpan.FromSeconds(1),
+                    MaxBackoff = TimeSpan.FromSeconds(5),
+                    BackoffMultiplier = 1.5,
+                    RetryableStatusCodes = { StatusCode.Unavailable }
+                }
+            };
+
             // The port number(5001) must match the port of the gRPC server.
-            using var channel = GrpcChannel.ForAddress("https://localhost:5001");
+            using var channel = GrpcChannel.ForAddress("https://localhost:5001", new GrpcChannelOptions
+            {
+                ServiceConfig = new ServiceConfig { MethodConfigs = { defaultMethodConfig } }
+            });
+
             var client = new gRPCDemo.gRPCDemoClient(channel);
 
             TokenSource = new CancellationTokenSource();
