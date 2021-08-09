@@ -37,5 +37,20 @@ namespace gRPCServer.Services
                 await Task.Delay(500);
             }
         }
+
+        public override async Task<SampleReply> ClientSideStream(IAsyncStreamReader<SampleRequest> requestStream, ServerCallContext context)
+        {
+            _logger.LogInformation("Received client streaming call from client");
+
+            var result = string.Empty;
+
+            await foreach (var request in requestStream.ReadAllAsync())
+            {
+                _logger.LogInformation("Client streaming request with name: {0}", request.Name);
+                result += request.Name;
+            }
+
+            return new SampleReply { Message = result };
+        }
     }
 }

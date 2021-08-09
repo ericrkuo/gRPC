@@ -10,6 +10,8 @@ service gRPCDemo {
   rpc UnaryCall (SampleRequest) returns (SampleReply);
 
   rpc ServerSideStream (SampleRequest) returns (stream SampleReply);
+
+  rpc ClientSideStream (stream SampleRequest) returns (SampleReply);
 }
 
 // The request message containing the user's name.
