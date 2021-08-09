@@ -29,12 +29,18 @@ namespace gRPCServer.Services
 
             foreach (char c in request.Name.ToCharArray())
             {
+                if (context.CancellationToken.IsCancellationRequested) 
+                {
+                    _logger.LogWarning("Received cancellation request");
+                    return;
+                };
+
                 var reply = new SampleReply()
                 {
                     Message = string.Format("Streaming letter by letter: {0}", c)
                 };
                 await responseStream.WriteAsync(reply);
-                await Task.Delay(500);
+                await Task.Delay(1000);
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Grpc.Core;
 using Grpc.Net.Client;
@@ -8,6 +9,8 @@ namespace GrpcGreeterClient
 {
     class Program
     {
+        private static CancellationTokenSource TokenSource { get; set; }
+
         static async Task Main(string[] args)
         {
             Console.Write("Select type of call: Unary[0], Server[1], Client[2], Bidirectional[3]: ");
@@ -16,6 +19,15 @@ namespace GrpcGreeterClient
             // The port number(5001) must match the port of the gRPC server.
             using var channel = GrpcChannel.ForAddress("https://localhost:5001");
             var client = new gRPCDemo.gRPCDemoClient(channel);
+
+            TokenSource = new CancellationTokenSource();
+
+            Console.CancelKeyPress += delegate
+            {
+                Console.WriteLine("Cancelling token...");
+                TokenSource.Cancel();
+                Console.WriteLine("Token cancelled");
+            };
 
             switch (option)
             {
@@ -39,11 +51,11 @@ namespace GrpcGreeterClient
 
         private static async Task BidirectionalStreamDemo(gRPCDemo.gRPCDemoClient client)
         {
-            using var call = client.BidirectionalStream();
+            using var call = client.BidirectionalStream(cancellationToken: TokenSource.Token);
 
             var responseReaderTask = Task.Run(async () =>
             {
-                await foreach (var reply in call.ResponseStream.ReadAllAsync())
+                await foreach (var reply in call.ResponseStream.ReadAllAsync(cancellationToken: TokenSource.Token))
                 {
                     Console.WriteLine("Server is streaming message to client: {0}", reply.Message);
                 }
@@ -62,14 +74,14 @@ namespace GrpcGreeterClient
 
         private static async Task ClientStreamDemo(gRPCDemo.gRPCDemoClient client)
         {
-            using var call = client.ClientSideStream();
+            using var call = client.ClientSideStream(cancellationToken: TokenSource.Token);
 
             string[] messages = { "hi", "my", "name", "is", "GreeterClient" };
 
             foreach (var message in messages)
             {
                 await call.RequestStream.WriteAsync(new SampleRequest { Name = message });
-                await Task.Delay(500);
+                await Task.Delay(1000);
             }
 
             await call.RequestStream.CompleteAsync();
@@ -80,9 +92,9 @@ namespace GrpcGreeterClient
 
         private static async Task ServerStreamDemo(gRPCDemo.gRPCDemoClient client)
         {
-            using var call = client.ServerSideStream(new SampleRequest { Name = "GreeterClient" });
+            using var call = client.ServerSideStream(new SampleRequest { Name = "GreeterClient" }, cancellationToken: TokenSource.Token);
 
-            await foreach (var reply in call.ResponseStream.ReadAllAsync())
+            await foreach (var reply in call.ResponseStream.ReadAllAsync(cancellationToken: TokenSource.Token))
             {
                 Console.WriteLine("Server is streaming message to client: {0}", reply.Message);
             }
@@ -98,7 +110,8 @@ namespace GrpcGreeterClient
         {
             var client = new Greeter.GreeterClient(channel);
             var reply = await client.SayHelloAsync(
-                              new HelloRequest { Name = "GreeterClient" });
+                              new HelloRequest { Name = "GreeterClient" },
+                              cancellationToken: TokenSource.Token);
             Console.WriteLine("Greeting: " + reply.Message);
         }
     }
