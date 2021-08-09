@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Protobuf Include="..\gRPCCommon\Protos\greet.proto" GrpcServices="Server" />
+    <Protobuf Include="..\gRPCCommon\Protos\demo.proto" GrpcServices="Server" />
   </ItemGroup>
 
   <ItemGroup>

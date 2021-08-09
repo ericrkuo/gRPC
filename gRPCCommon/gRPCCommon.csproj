@@ -6,8 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Update="Protos\demo.proto">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Protos\greet.proto">
-      <GrpcServices>Client</GrpcServices>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

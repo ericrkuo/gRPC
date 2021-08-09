@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option csharp_namespace = "gRPCCommon";
+
+package demo;
+
+// The greeting service definition.
+service gRPCDemo {
+  // Sends a greeting
+  rpc UnaryCall (SampleRequest) returns (SampleReply);
+}
+
+// The request message containing the user's name.
+message SampleRequest {
+  string name = 1;
+}
+
+// The response message containing the greetings.
+message SampleReply {
+  string message = 1;
+}

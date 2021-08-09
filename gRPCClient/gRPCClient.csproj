@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <Protobuf Include="..\gRPCCommon\Protos\greet.proto" GrpcServices="Client" />
+    <Protobuf Include="..\gRPCCommon\Protos\demo.proto" GrpcServices="Client" />
   </ItemGroup>
 
 </Project>
