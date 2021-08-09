@@ -52,5 +52,22 @@ namespace gRPCServer.Services
 
             return new SampleReply { Message = result };
         }
+
+        /// <summary>
+        /// Reads client stream, cumuluates messages, and streams back to client
+        /// </summary>
+        public override async Task BidirectionalStream(IAsyncStreamReader<SampleRequest> requestStream, IServerStreamWriter<SampleReply> responseStream, ServerCallContext context)
+        {
+            var cumulativeResult = string.Empty;
+
+            await foreach (var request in requestStream.ReadAllAsync())
+            {
+                _logger.LogInformation("Server received request with name: {0}", request.Name);
+                
+                cumulativeResult += string.Format("{0}, ", request.Name);
+                await Task.Delay(1000);
+                await responseStream.WriteAsync(new SampleReply { Message = cumulativeResult });
+            }
+        }
     }
 }

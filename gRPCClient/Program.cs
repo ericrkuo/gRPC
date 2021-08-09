@@ -10,7 +10,7 @@ namespace GrpcGreeterClient
     {
         static async Task Main(string[] args)
         {
-            Console.Write("Select type of call: Unary[0], Server[1], Client[2]: ");
+            Console.Write("Select type of call: Unary[0], Server[1], Client[2], Bidirectional[3]: ");
             String option = Console.ReadLine();
 
             // The port number(5001) must match the port of the gRPC server.
@@ -28,10 +28,36 @@ namespace GrpcGreeterClient
                 case "2":
                     await ClientStreamDemo(client);
                     break;
+                case "3":
+                    await BidirectionalStreamDemo(client);
+                    break;
             }
 
             Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
+        }
+
+        private static async Task BidirectionalStreamDemo(gRPCDemo.gRPCDemoClient client)
+        {
+            using var call = client.BidirectionalStream();
+
+            var responseReaderTask = Task.Run(async () =>
+            {
+                await foreach (var reply in call.ResponseStream.ReadAllAsync())
+                {
+                    Console.WriteLine("Server is streaming message to client: {0}", reply.Message);
+                }
+            });
+
+            string[] messages = { "hi", "my", "name", "is", "GreeterClient" };
+
+            foreach (var message in messages)
+            {
+                await call.RequestStream.WriteAsync(new SampleRequest { Name = message });
+                await Task.Delay(2000);
+            }
+
+            await Task.WhenAll(call.RequestStream.CompleteAsync(), responseReaderTask);
         }
 
         private static async Task ClientStreamDemo(gRPCDemo.gRPCDemoClient client)
