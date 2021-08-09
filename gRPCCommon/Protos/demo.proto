@@ -8,6 +8,8 @@ package demo;
 service gRPCDemo {
   // Sends a greeting
   rpc UnaryCall (SampleRequest) returns (SampleReply);
+
+  rpc ServerSideStream (SampleRequest) returns (stream SampleReply);
 }
 
 // The request message containing the user's name.
