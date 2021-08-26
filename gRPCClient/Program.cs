@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Grpc.Core;
+﻿using Grpc.Core;
 using Grpc.Net.Client;
 using Grpc.Net.Client.Configuration;
 using gRPCCommon;
@@ -14,9 +11,6 @@ namespace GrpcGreeterClient
 
         static async Task Main(string[] args)
         {
-            Console.Write("Select type of call: Unary[0], Server[1], Client[2], Bidirectional[3]: ");
-            String option = Console.ReadLine();
-
             var defaultMethodConfig = new MethodConfig
             {
                 Names = { MethodName.Default },
@@ -47,24 +41,39 @@ namespace GrpcGreeterClient
                 Console.WriteLine("Token cancelled");
             };
 
-            switch (option)
+            do
             {
-                case "0":
-                    await UnaryCallDemo(client);
-                    break;
-                case "1":
-                    await ServerStreamDemo(client);
-                    break;
-                case "2":
-                    await ClientStreamDemo(client);
-                    break;
-                case "3":
-                    await BidirectionalStreamDemo(client);
-                    break;
-            }
+                Console.Write("Select type of call: Unary[0], Server[1], Client[2], Bidirectional[3] or press any other key to exit: ");
+                String option = Console.ReadLine();
 
-            Console.WriteLine("Press any key to exit...");
-            Console.ReadKey();
+                try {
+                    switch (option)
+                    {
+                        case "0":
+                            await UnaryCallDemo(client);
+                            break;
+                        case "1":
+                            await ServerStreamDemo(client);
+                            break;
+                        case "2":
+                            await ClientStreamDemo(client);
+                            break;
+                        case "3":
+                            await BidirectionalStreamDemo(client);
+                            break;
+                        default:
+                            TokenSource.Cancel();
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
+                
+            } while (!TokenSource.IsCancellationRequested);
+
+            Console.WriteLine("Exiting program...");
         }
 
         private static async Task BidirectionalStreamDemo(gRPCDemo.gRPCDemoClient client)

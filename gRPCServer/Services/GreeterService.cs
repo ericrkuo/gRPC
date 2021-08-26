@@ -1,7 +1,5 @@
 using Grpc.Core;
 using gRPCCommon;
-using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
 
 namespace gRPCServer.Services
 {

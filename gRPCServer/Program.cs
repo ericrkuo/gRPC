@@ -1,12 +1,11 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-
 namespace gRPCServer
 {
     public class Program
     {
         public static void Main(string[] args)
         {
+            // Bug in VS 2022 Preview 3 https://developercommunity.visualstudio.com/t/unable-to-debug-grpc-server-code-with-preview-3/1503691
+            Environment.SetEnvironmentVariable("ASPNETCORE_PREVENTHOSTINGSTARTUP", "true");
             CreateHostBuilder(args).Build().Run();
         }
 

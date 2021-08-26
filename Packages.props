@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--https://www.mytechramblings.com/posts/centrally-manage-nuget-versions/-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="Microsoft Nugets">
+    <PackageReference Update="Google.Protobuf" Version="3.17.3" />
+    <PackageReference Update="Grpc.Net.Client" Version="2.39.0" />
+    <PackageReference Update="Grpc.Tools" Version="2.39.1" />
+    <PackageReference Update="Grpc.AspNetCore" Version="2.39.0" />
+  </ItemGroup>
+</Project>
